@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 
 function Dashboard({ status, onStop }) {
+  const TRADE_HISTORY_DISPLAY_LIMIT = 10;
   const [portfolio, setPortfolio] = useState(null);
   const [trades, setTrades] = useState({ active: [], history: [] });
   const [loading, setLoading] = useState(false);
@@ -160,7 +161,7 @@ function Dashboard({ status, onStop }) {
               </tr>
             </thead>
             <tbody>
-              {trades.history.slice(-10).reverse().map((trade, index) => (
+              {trades.history.slice(-TRADE_HISTORY_DISPLAY_LIMIT).reverse().map((trade, index) => (
                 <tr key={index}>
                   <td style={{ fontWeight: '600' }}>{trade.symbol}</td>
                   <td>{trade.type}</td>

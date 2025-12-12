@@ -1,5 +1,6 @@
 class PairSelectionService {
   constructor() {
+    this.MAX_SELECTED_PAIRS = 10;
     this.riskProfiles = {
       safe: {
         minVolume: 10000000,
@@ -51,7 +52,7 @@ class PairSelectionService {
       .filter(pair => pair.volatility <= profile.volatilityThreshold)
       .sort((a, b) => b.score - a.score);
 
-    return filteredPairs.slice(0, 10);
+    return filteredPairs.slice(0, this.MAX_SELECTED_PAIRS);
   }
 
   calculateVolatility(pair) {

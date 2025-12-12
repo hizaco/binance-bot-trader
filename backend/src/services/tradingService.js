@@ -8,6 +8,7 @@ class TradingService {
     this.activeTrades = [];
     this.tradeHistory = [];
     this.interval = null;
+    this.MAX_CONCURRENT_TRADES = 3;
   }
 
   async start(config) {
@@ -75,12 +76,17 @@ class TradingService {
 
       console.log(`Available: ${availableAmount} USDT, Trading: ${tradingAmount} USDT`);
 
-      for (let i = 0; i < Math.min(3, selectedPairs.length) && i < this.activeTrades.length; i++) {
+      const maxNewTrades = Math.min(
+        this.MAX_CONCURRENT_TRADES - this.activeTrades.length,
+        selectedPairs.length
+      );
+
+      for (let i = 0; i < maxNewTrades; i++) {
         const pair = selectedPairs[i];
         this.activeTrades.push({
           symbol: pair.symbol,
           entryPrice: pair.lastPrice,
-          amount: tradingAmount / 3,
+          amount: tradingAmount / this.MAX_CONCURRENT_TRADES,
           timestamp: new Date().toISOString(),
           status: 'active',
           priceChange: pair.priceChange,
