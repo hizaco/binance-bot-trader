@@ -41,7 +41,7 @@ function Configuration({ status, onStart }) {
           min="1"
           max="100"
           value={config.portfolioPercentage}
-          onChange={(e) => setConfig({ ...config, portfolioPercentage: parseInt(e.target.value) })}
+          onChange={(e) => setConfig({ ...config, portfolioPercentage: parseInt(e.target.value, 10) })}
           disabled={status?.isRunning}
         />
         <p style={{ fontSize: '14px', color: '#9ca3af', marginTop: '5px' }}>

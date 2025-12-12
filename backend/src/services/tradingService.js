@@ -1,5 +1,6 @@
 const binanceService = require('./binanceService');
 const pairSelectionService = require('./pairSelectionService');
+const { MAX_CONCURRENT_TRADES, TRADING_CYCLE_INTERVAL, MIN_TRADE_AMOUNT } = require('../utils/constants');
 
 class TradingService {
   constructor() {
@@ -8,7 +9,6 @@ class TradingService {
     this.activeTrades = [];
     this.tradeHistory = [];
     this.interval = null;
-    this.MAX_CONCURRENT_TRADES = 3;
   }
 
   async start(config) {
@@ -32,7 +32,7 @@ class TradingService {
       if (this.isRunning) {
         await this.executeTradingCycle();
       }
-    }, 60000);
+    }, TRADING_CYCLE_INTERVAL);
 
     return { status: 'started', config: this.config };
   }
@@ -73,11 +73,17 @@ class TradingService {
 
       const availableAmount = parseFloat(usdtBalance.free);
       const tradingAmount = (availableAmount * this.config.portfolioPercentage) / 100;
+      const amountPerTrade = tradingAmount / MAX_CONCURRENT_TRADES;
 
       console.log(`Available: ${availableAmount} USDT, Trading: ${tradingAmount} USDT`);
 
+      if (amountPerTrade < MIN_TRADE_AMOUNT) {
+        console.log(`Trade amount ${amountPerTrade} USDT is below minimum ${MIN_TRADE_AMOUNT} USDT`);
+        return;
+      }
+
       const maxNewTrades = Math.min(
-        this.MAX_CONCURRENT_TRADES - this.activeTrades.length,
+        MAX_CONCURRENT_TRADES - this.activeTrades.length,
         selectedPairs.length
       );
 
@@ -86,7 +92,7 @@ class TradingService {
         this.activeTrades.push({
           symbol: pair.symbol,
           entryPrice: pair.lastPrice,
-          amount: tradingAmount / this.MAX_CONCURRENT_TRADES,
+          amount: amountPerTrade,
           timestamp: new Date().toISOString(),
           status: 'active',
           priceChange: pair.priceChange,
