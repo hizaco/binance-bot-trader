@@ -41,18 +41,22 @@ git clone https://github.com/hizaco/binance-bot-trader.git
 cd binance-bot-trader
 ```
 
-2. **Configurer les variables d'environnement**
+2. **Configurer les variables d'environnement (Optionnel)**
+
+Pour utiliser vos propres clés API, créez un fichier `.env` à la racine :
 ```bash
-cp backend/.env.example backend/.env
+cp .env.example .env
 ```
 
-Éditer `backend/.env` :
+Éditer `.env` avec vos clés API :
 ```
 BINANCE_API_KEY=your_api_key_here
 BINANCE_API_SECRET=your_api_secret_here
 PORT=3001
 NODE_ENV=production
 ```
+
+**Note** : Si vous ne créez pas de fichier `.env`, l'application démarrera avec des valeurs par défaut. Vous devrez ensuite configurer vos clés API via l'interface web.
 
 3. **Lancer l'application avec Docker**
 ```bash
