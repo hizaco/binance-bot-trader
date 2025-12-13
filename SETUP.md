@@ -68,13 +68,17 @@ git clone https://github.com/hizaco/binance-bot-trader.git
 cd binance-bot-trader
 ```
 
-#### 2. Configurer l'Environnement
+#### 2. Configurer l'Environnement (Optionnel)
+
+**Note** : Cette étape est optionnelle. Vous pouvez démarrer l'application sans configuration et entrer vos clés API via l'interface web.
+
+Pour configurer vos clés API avant le démarrage :
 ```bash
 # Copier le fichier d'exemple
-cp backend/.env.example backend/.env
+cp .env.example .env
 
 # Éditer avec vos clés
-nano backend/.env  # ou vim, code, etc.
+nano .env  # ou vim, code, etc.
 ```
 
 Contenu du `.env` :

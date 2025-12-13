@@ -1,12 +1,13 @@
-version: '3.8'
-
 services:
   backend:
     build: ./backend
     ports:
       - "3001:3001"
-    env_file:
-      - ./backend/.env
+    environment:
+      - BINANCE_API_KEY=${BINANCE_API_KEY:-your_binance_api_key_here}
+      - BINANCE_API_SECRET=${BINANCE_API_SECRET:-your_binance_api_secret_here}
+      - PORT=${PORT:-3001}
+      - NODE_ENV=${NODE_ENV:-development}
     volumes:
       - ./backend:/app
       - /app/node_modules
